@@ -57,7 +57,7 @@ VALID_PRIVACY_STATUSES = ('public', 'private', 'unlisted')
 def get_authenticated_service():
   flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
   credentials = flow.run_local_server(host='localhost',
-      port=8080, 
+      port=8089, 
       authorization_prompt_message='Please visit this URL: {url}', 
       success_message='The auth flow is complete; you may close this window.',
       open_browser=True)
