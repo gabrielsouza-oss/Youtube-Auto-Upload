@@ -62,9 +62,9 @@ def get_authenticated_service():
 def set_thumbnail(youtube, video_id, thumbnail_url):
   request = youtube.thumbnails().set(
       videoId=video_id,
-      media_body=googleapiclient.http.MediaFileUpload(thumbnail_url,
-                                                       mimetype='image/jpeg',
-                                                       resumable=True)
+      media_body=MediaFileUpload(thumbnail_url,
+                                 mimetype='image/jpeg',
+                                 resumable=True)
   )
   response = request.execute()
   print("Thumbnail was successfully set.")
