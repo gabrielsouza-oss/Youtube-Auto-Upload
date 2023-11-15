@@ -109,8 +109,7 @@ def initialize_upload(youtube, options):
   
   try:
     set_thumbnail(youtube, id, options.thumb)
-  except(e):
-    print(e)
+  except:
     pass
     
   
