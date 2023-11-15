@@ -115,7 +115,7 @@ def initialize_upload(youtube, options):
 
 # This method implements an exponential backoff strategy to resume a
 # failed upload.
-def resumable_upload(request, thumb):
+def resumable_upload(request):
   response = None
   error = None
   retry = 0
