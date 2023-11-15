@@ -106,7 +106,11 @@ def initialize_upload(youtube, options):
   )
   
   id = resumable_upload(insert_request)
-  set_thumbnail(youtube, id, options.thumb)
+  
+  try:
+    set_thumbnail(youtube, id, options.thumb)
+  except:
+    pass
   
 
 # This method implements an exponential backoff strategy to resume a
@@ -149,7 +153,7 @@ def resumable_upload(request, thumb):
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--file', required=True, help='Video file to upload')
-  parser.add_argument('--thumb', required=True, help='Video Thumbnail')
+  parser.add_argument('--thumb', help='Video Thumbnail')
   parser.add_argument('--title', help='Video title', default='Test Title')
   parser.add_argument('--description', help='Video description',
     default='Test Description')
