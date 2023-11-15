@@ -58,6 +58,17 @@ def get_authenticated_service():
   flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRETS_FILE, SCOPES)
   credentials = flow.run_console()
   return build(API_SERVICE_NAME, API_VERSION, credentials=credentials)
+  
+def set_thumbnail(youtube, video_id, thumbnail_url):
+  request = youtube.thumbnails().set(
+      videoId=video_id,
+      media_body=googleapiclient.http.MediaFileUpload(thumbnail_url,
+                                                       mimetype='image/jpeg',
+                                                       resumable=True)
+  )
+  response = request.execute()
+  print("Thumbnail was successfully set.")
+  return response
 
 def initialize_upload(youtube, options):
   tags = None
@@ -93,12 +104,14 @@ def initialize_upload(youtube, options):
     # 1024 * 1024 (1 megabyte).
     media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
   )
-
-  resumable_upload(insert_request)
+  
+  id = resumable_upload(insert_request)
+  set_thumbnail(youtube, id, options.thumb)
+  
 
 # This method implements an exponential backoff strategy to resume a
 # failed upload.
-def resumable_upload(request):
+def resumable_upload(request, thumb):
   response = None
   error = None
   retry = 0
@@ -109,6 +122,8 @@ def resumable_upload(request):
       if response is not None:
         if 'id' in response:
           print('Video id "%s" was successfully uploaded.' % response['id'])
+          id = response['id']
+          return id
         else:
           exit('The upload failed with an unexpected response: %s' % response)
     except(HttpError, e):
@@ -134,6 +149,7 @@ def resumable_upload(request):
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
   parser.add_argument('--file', required=True, help='Video file to upload')
+  parser.add_argument('--thumb', required=True, help='Video Thumbnail')
   parser.add_argument('--title', help='Video title', default='Test Title')
   parser.add_argument('--description', help='Video description',
     default='Test Description')
