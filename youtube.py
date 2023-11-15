@@ -107,8 +107,12 @@ def initialize_upload(youtube, options):
   
   id = resumable_upload(insert_request)
   
-  if len(options.thumb) > 0:
+  try:
     set_thumbnail(youtube, id, options.thumb)
+  except(e):
+    print(e)
+    pass
+    
   
 
 # This method implements an exponential backoff strategy to resume a
