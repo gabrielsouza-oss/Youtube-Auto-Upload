@@ -111,13 +111,13 @@ def resumable_upload(request):
           print('Video id "%s" was successfully uploaded.' % response['id'])
         else:
           exit('The upload failed with an unexpected response: %s' % response)
-    except HttpError, e:
+    except(HttpError, e):
       if e.resp.status in RETRIABLE_STATUS_CODES:
         error = 'A retriable HTTP error %d occurred:\n%s' % (e.resp.status,
                                                              e.content)
       else:
         raise
-    except RETRIABLE_EXCEPTIONS, e:
+    except(RETRIABLE_EXCEPTIONS, e):
       error = 'A retriable error occurred: %s' % e
 
     if error is not None:
